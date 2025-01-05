@@ -70,16 +70,37 @@ print(reasons_games['Reasons'].value_counts())
 
 #Now visualizing the data
 import matplotlib.pyplot as plt
-import seaborn as sns
+# Count in each age group
+age_counts = [
+    len(ageunder_15),  
+    len(age16),        
+    len(age22),        
+    len(age30),        
+    len(age37)         
+]
 
-# Histogram for Age distribution
-plt.figure(figsize=(12, 8))
-sns.histplot(ageunder_15['Age'], bins=10, kde=True, label='Under 15')
-sns.histplot(age16['Age'], bins=10, kde=True, label='16')
-sns.histplot(age22['Age'], bins=10, kde=True, label='22')
-sns.histplot(age30['Age'], bins=10, kde=True, label='30')
-sns.histplot(age37['Age'], bins=10, kde=True, label='37')
+# Labels for the pie chart
+labels = ['Under 15', '16', '22', '30', '37']
+
+# Plot the pie chart
+plt.figure(figsize=(8, 8))
+plt.pie(age_counts, labels=labels, autopct='%1.1f%%', startangle=140, colors=['skyblue', 'lightgreen', 'lightcoral', 'yellow', 'violet'])
 plt.title('Age Distribution')
-plt.xlabel('Age')
-plt.ylabel('Frequency')
-plt.legend()
+plt.show()
+
+# Count for each reason
+reason_counts = [
+    len(reasons_alltheabove),      
+    len(reasons_humannegligence),  
+    len(reasons_internet),         
+    len(reasons_games)             
+]
+
+# Labels for the pie chart
+labels = ['All of the Above', 'Human Negligence', 'Using Internet all the time', 'Playing Games online']
+
+# Plot the pie chart
+plt.figure(figsize=(8, 8))
+plt.pie(reason_counts, labels=labels, autopct='%1.1f%%', startangle=140, colors=['skyblue', 'lightgreen', 'lightcoral', 'yellow'])
+plt.title('Distribution of Reasons for Cyber Incidents')
+plt.show()
