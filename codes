@@ -51,9 +51,6 @@ reasons_games = pd.DataFrame(cursor.fetchall(), columns=['Reasons'])
 print(ageunder_15.isnull().sum())
 print(reasons_alltheabove.isnull().sum())
 
-# Convert Age column to numeric (if needed)
-ageunder_15['Age'] = pd.to_numeric(ageunder_15['Age'], errors='coerce')   
-
 #Now analysing the data(EDA)
 #Summary statistics for Age
 print(ageunder_15.describe())
