@@ -1,0 +1,85 @@
+import pyodbc
+conn=pyodbc.connect(
+        trusted_connection='yes',
+        driver='{ODBC Driver 17 for SQL Server}',
+        server='CREATEX-LAPTOP-\SQLEXPRESS01',
+        database='cybercrime',
+        
+)
+
+#Create a cursor
+cursor = conn.cursor()
+
+#SQL Query
+'''UPDATE [Cyber Sample Data Set 2024]
+SET age = TRY_CAST(SUBSTRING(age, 1, 2) AS INT)
+WHERE ISNUMERIC(SUBSTRING(age, 1, 2)) = 1;'''
+
+import pandas as pd
+
+# Loads querys into a DataFrame
+cursor.execute("SELECT Age FROM [Cyber Sample Data Set 2024] WHERE Age LIKE '%under 15%'")
+ageunder_15 = pd.DataFrame(cursor.fetchall(), columns=['Age'])
+
+cursor.execute("SELECT Age FROM [Cyber Sample Data Set 2024] WHERE Age LIKE '%16%'")
+age16 = pd.DataFrame(cursor.fetchall(), columns=['Age'])
+
+cursor.execute("SELECT Age FROM [Cyber Sample Data Set 2024] WHERE Age LIKE '%22%'")
+age22 = pd.DataFrame(cursor.fetchall(), columns=['Age'])
+
+cursor.execute("SELECT Age FROM [Cyber Sample Data Set 2024] WHERE Age LIKE '%30%'")
+age30 = pd.DataFrame(cursor.fetchall(), columns=['Age'])
+
+cursor.execute("SELECT Age FROM [Cyber Sample Data Set 2024] WHERE Age LIKE '%37%'")
+age37 = pd.DataFrame(cursor.fetchall(), columns=['Age'])
+
+# Load Reasons query into a DataFrame
+cursor.execute("SELECT Reasons FROM [Cyber Sample Data Set 2024] WHERE Reasons LIKE '%all of the above%'")
+reasons_alltheabove = pd.DataFrame(cursor.fetchall(), columns=['Reasons'])
+
+cursor.execute("SELECT Reasons FROM [Cyber Sample Data Set 2024] WHERE Reasons LIKE '%Human Negligence%'")
+reasons_humannegligence = pd.DataFrame(cursor.fetchall(), columns=['Reasons'])
+
+cursor.execute("SELECT Reasons FROM [Cyber Sample Data Set 2024] WHERE Reasons LIKE '%Using Internet all the time%'")
+reasons_internet = pd.DataFrame(cursor.fetchall(), columns=['Reasons'])
+
+cursor.execute("SELECT Reasons FROM [Cyber Sample Data Set 2024] WHERE Reasons LIKE '%Playing Games online%'")
+reasons_games = pd.DataFrame(cursor.fetchall(), columns=['Reasons'])
+
+ #cleaning and processing the data
+ #Check for missing values
+print(ageunder_15.isnull().sum())
+print(reasons_alltheabove.isnull().sum())
+
+# Convert Age column to numeric (if needed)
+ageunder_15['Age'] = pd.to_numeric(ageunder_15['Age'], errors='coerce')   
+
+#Now analysing the data(EDA)
+#Summary statistics for Age
+print(ageunder_15.describe())
+print(age16.describe())
+print(age22.describe())
+print(age30.describe())
+print(age37.describe())
+
+# Count of Reasons
+print(reasons_alltheabove['Reasons'].value_counts())
+print(reasons_humannegligence['Reasons'].value_counts())
+print(reasons_internet['Reasons'].value_counts())
+print(reasons_games['Reasons'].value_counts())
+
+#Now visualizing the data
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Histogram for Age distribution
+plt.figure(figsize=(12, 8))
+sns.histplot(ageunder_15['Age'], bins=10, kde=True, label='Under 15')
+sns.histplot(age16['Age'], bins=10, kde=True, label='16')
+sns.histplot(age22['Age'], bins=10, kde=True, label='22')
+sns.histplot(age30['Age'], bins=10, kde=True, label='30')
+sns.histplot(age37['Age'], bins=10, kde=True, label='37')
+plt.title('Age Distribution')
+plt.xlabel('Age')
+plt.ylabel('Frequency')
+plt.legend()
